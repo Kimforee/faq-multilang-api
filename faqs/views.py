@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from .models import FAQ
 from .serializers import FAQSerializer
 from django.core.cache import cache
+from django.shortcuts import render
 
 
 class FAQListView(generics.ListAPIView):
@@ -26,3 +27,10 @@ class FAQListView(generics.ListAPIView):
         # Cache response for 1 hour
         cache.set(cache_key, serializer.data, timeout=3600)
         return Response(serializer.data)
+
+def faq_list_view(request):
+    """Renders a simple template to display FAQs with language selection."""
+    lang = request.GET.get("lang", "en")
+    faqs = [faq.get_translated_faq(lang) for faq in FAQ.objects.all()]
+    
+    return render(request, "faqs/faq_list.html", {"faqs": faqs})
