@@ -1,0 +1,45 @@
+# version: "3.9"
+
+# services:
+#   web:
+#     build: .
+#     container_name: django_faq
+#     command: ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+#     volumes:
+#       - .:/app
+#       - static_volume:/app/staticfiles  # Mount static files
+#     ports:
+#       - "8000:8000"
+#     depends_on:
+#       - redis
+#     environment:
+#       - DEBUG=True
+#       - REDIS_URL=redis://redis:6379/0
+
+#   redis:
+#     image: redis:alpine
+#     container_name: faq_redis
+
+# volumes:
+#   static_volume:
+
+version: "3.9"
+
+services:
+  web:
+    build: .
+    container_name: django_faq
+    command: ["gunicorn", "--bind", "0.0.0.0:8000", "config.wsgi:application"]
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - redis
+    environment:
+      - DEBUG=True
+      - REDIS_URL=redis://redis:6379/0
+
+  redis:
+    image: redis:alpine
+    container_name: faq_redis
