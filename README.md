@@ -10,45 +10,79 @@
 - PEP8 compliance using `flake8`.
 
 Testing : ![image](https://github.com/user-attachments/assets/d5a3dee4-77a4-4339-be68-acf8a1960c58)
-
+Home page : 
+![image](https://github.com/user-attachments/assets/a83d7b54-74a2-423e-84d6-ae0e79093947)
+Admin :
+![image](https://github.com/user-attachments/assets/580034c5-bfa9-4863-8e65-99d9d73f77e2)
 ---
 
-### Check Code Quality with flake8**  
-Run `flake8` to check for PEP8 compliance:  
-```bash
-flake8 faqs/views.py
-```
-
 ### Prerequisites
-- Python 3.11+
+- Python 3.10+
 - PostgreSQL or SQLite (default)
 - Redis (for caching)
 
-### Setup
+### Docker Build
+```bash
+docker-compose up --build
+```
+#### **Admin Panel**  
+
+#### **Automated Superuser Credentials**
+Automated superuser is created if docker is used, use the following credentials:  
+**Username:** `123`  
+**Password:** `123`  
+Access Django Admin:  
+```bash
+http://127.0.0.1:8000/admin/
+```
+create a new superuser using:  
+```bash
+python manage.py createsuperuser
+```
+---
+
+### Local Setup
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/django-multilingual-faq.git
-   cd django-multilingual-faq
+   git clone https://github.com/Kimforee/faq-multilang-api.git
+   cd faq-multilang-api
    ```
 
 2. Create a virtual environment:
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows: venv\Scripts\activate
+   source venv/scripts/activate  # On Windows: venv\Scripts\activate
    ```
 
-3. Install dependencies:
+3. Ensure Redis is installed and running locally:
+   ```bash
+   redis-server
+   ```
+4. Update settings.py to use local Redis:
+   ```bash
+   CACHES = {
+       "default": {
+           "BACKEND": "django_redis.cache.RedisCache",
+           "LOCATION": "redis://localhost:6379/1",
+           "OPTIONS": {
+               "CLIENT_CLASS": "django_redis.client.DefaultClient",
+           }
+       }
+   }
+   ```
+
+5. Install dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Apply migrations:
+6. Apply migrations:
    ```bash
    python manage.py makemigrations
    python manage.py migrate
    ```
 
-5. Run the server:
+7. Run the server:
    ```bash
    python manage.py runserver
    ```
@@ -70,7 +104,7 @@ curl http://127.0.0.1:8000/api/faqs/?lang=hi
 curl http://127.0.0.1:8000/api/faqs/?lang=bn
 ```
 
-## Running Tests
+## Running Tests (works with local setup only)
 ```bash
 pytest
 ```
@@ -79,11 +113,3 @@ pytest
 ```bash
 flake8 faqs/
 ```
-
-## Git Best Practices
-Use conventional commit messages:
-- `feat: Add FAQ translation`
-- `fix: Improve caching mechanism`
-- `docs: Update API documentation`
-
----
