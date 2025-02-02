@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQs</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; padding: 20px; }
+        .container { max-width: 600px; margin: auto; text-align: center; }
+        .faq { background: #f4f4f4; padding: 15px; margin-bottom: 10px; border-radius: 5px; }
+        .button { display: block; margin: 20px auto; padding: 10px; text-decoration: none; background: #007BFF; color: #fff; border-radius: 5px; width: 200px; text-align: center; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Frequently Asked Questions</h2>
+
+        <!-- Language Selection Dropdown -->
+        <form method="GET" style="margin-bottom: 20px;">
+            <label for="lang">Select Language:</label>
+            <select name="lang" id="lang" onchange="this.form.submit()">
+                <option value="en" {% if request.GET.lang == 'en' %}selected{% endif %}>English</option>
+                <option value="hi" {% if request.GET.lang == 'hi' %}selected{% endif %}>Hindi</option>
+                <option value="bn" {% if request.GET.lang == 'bn' %}selected{% endif %}>Bengali</option>
+            </select>
+        </form>
+
+        <!-- FAQs List -->
+        {% for faq in faqs %}
+            <div class="faq">
+                <h3>{{ faq.question }}</h3>
+                <p>{{ faq.answer }}</p>
+            </div>
+        {% endfor %}
+
+        <!-- Add FAQ Button -->
+        <a href="/admin/faqs/faq/add/" class="button">Add FAQ</a>
+    </div>
+</body>
+</html>
