@@ -18,5 +18,26 @@ else:
     print("Superuser already exists.")
 EOF
 
+echo "Inserting default FAQs..."
+python manage.py shell <<EOF
+from faqs.models import FAQ
+
+if not FAQ.objects.filter(question="What is Django?").exists():
+    faq1 = FAQ.objects.create(
+        question="What is Django?",
+        answer="Django is a high-level Python web framework."
+    )
+    print(faq1.get_translated_faq("hi"))  # Fetch Hindi translation
+    print(faq1.get_translated_faq("bn"))  # Fetch Bengali translation
+
+if not FAQ.objects.filter(question="How does Django handle requests?").exists():
+    faq2 = FAQ.objects.create(
+        question="How does Django handle requests?",
+        answer="Django follows the MVT (Model-View-Template) architecture."
+    )
+    print(faq2.get_translated_faq("hi"))  # Fetch Hindi translation
+    print(faq2.get_translated_faq("bn"))  # Fetch Bengali translation
+EOF
+
 echo "Starting Gunicorn..."
 exec "$@"
